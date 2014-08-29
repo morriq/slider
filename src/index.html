@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pl" manifest="cache.manifest">
+<head>
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta rel="apple-touch-icon-precomposed" href="icon.png">
+    <meta rel="apple-touch-icon-precomposed" href="icon.png" sizes="72x72">
+    <meta rel="apple-touch-icon-precomposed" href="icon.png" sizes="114x114">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!--<meta name="viewport" content="minimal-ui">-->
+    <style type="text/css">
+        .block{
+            width: 100%;
+            height: 200px;
+        }
+        .red{
+            background-color: #ff0000;
+        }
+        .green{
+            background-color: #1f8019;
+        }
+    </style>
+</head>
+<body>
+    <div id="right">prawo</div>
+    <div id="left">lewo</div>
+    <div id="test">
+        <div class="red block">red</div>
+        <div class="green block">green</div>
+    </div>
+    <div id="test2">
+        <div class="red block">red</div>
+        <div class="green block">green</div>
+    </div>
+    <script type="text/javascript" src="HTML5Slider.js"></script>
+    <script type="text/javascript" src="HTML5Slider.Slide.js"></script>
+    <script type="text/javascript">
+        new HTML5Slider({
+            obj: document.getElementById('test'),
+            frameTime: 5000,
+            next: document.getElementById('right'),
+            prev: document.getElementById('left')
+        });
+        new HTML5Slider({
+            obj: document.getElementById('test2'),
+            frameTime: 10000
+        });
+    </script>
+</body>
+</html>
