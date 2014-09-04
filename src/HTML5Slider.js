@@ -28,6 +28,7 @@
       }
       i = 0;
       while (i < chLength) {
+        children[i].style.position = 'absolute';
         callback(children[i]);
         i++;
       }
