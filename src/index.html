@@ -42,12 +42,14 @@
     </div>
     <script type="text/javascript" src="HTML5Slider.js"></script>
     <script type="text/javascript" src="HTML5Slider.Slide.js"></script>
+    <script type="text/javascript" src="HTML5Slider.Animations.js"></script>
     <script type="text/javascript">
         new HTML5Slider({
             obj: document.getElementById('test'),
-            frameTime: 5000,
+            frameTime: 1000,
             next: document.getElementById('right'),
-            prev: document.getElementById('left')
+            prev: document.getElementById('left'),
+            animType: 'alpha'
         });
         new HTML5Slider({
             obj: document.getElementById('test2'),

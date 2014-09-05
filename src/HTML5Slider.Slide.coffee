@@ -21,11 +21,13 @@
             interval:       null
             children:       []
             width:          0
-            playingAnim:  null
+            playingAnim:    null
+            anim:           null
 
         HTML5Slider.prototype.extend @config, config
         @config.obj.style.position = 'relative'
-        @data.children  = HTML5Slider.prototype.getChildren @config.obj, @hideChild
+        @data.anim      = new HTML5Slider.Animations @config.animType, @onAnimationComplete.bind(@)
+        @data.children  = HTML5Slider.prototype.getChildren @config.obj, @hideChild.bind(@)
 
         @setInterval()
         @initButtons()
@@ -45,12 +47,13 @@
         @initButton @config.prev, @prevSlide if @config.prev
 
     hideChild: (child) ->
-        child.style.left    = -100%
-        child.style.alpha   = 0
+        @data.anim.hide child
+
         child.style.display = 'none'
 
-    showChild: (child, pos = 0) ->
-        child.style.left = pos
+    showChild: (child) ->
+        @data.anim.show child
+
         child.style.display = 'block'
 
     stepForward: ->
@@ -74,10 +77,12 @@
         @resetAnim()
         @setInterval()
 
+    onAnimationComplete: (setOn, lastSlide) ->
+        @onChangeOver setOn, lastSlide
+
     setSlide: (setOn, anim) ->
         lastNumber  = setOn - 1
         chLength    = @data.children.length
-        left        = 0
 
         if setOn >= chLength
             setOn = 0
@@ -95,13 +100,5 @@
             @onChangeOver setOn, lastSlide
             return
 
-        @showChild currSlide, '100%'
-        @data.playingAnim = setInterval (->
-            if lastSlide.style.left is '-100%'
-                @onChangeOver setOn, lastSlide
-                return
-
-            lastSlide.style.left = -left + '%'
-            currSlide.style.left = 100 - left + '%'
-            left++
-        ).bind(@), 1
+        @showChild currSlide
+        @data.playingAnim = @data.anim.run lastSlide, currSlide, setOn

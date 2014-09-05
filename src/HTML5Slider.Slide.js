@@ -22,11 +22,13 @@
         interval: null,
         children: [],
         width: 0,
-        playingAnim: null
+        playingAnim: null,
+        anim: null
       };
       HTML5Slider.prototype.extend(this.config, config);
       this.config.obj.style.position = 'relative';
-      this.data.children = HTML5Slider.prototype.getChildren(this.config.obj, this.hideChild);
+      this.data.anim = new HTML5Slider.Animations(this.config.animType, this.onAnimationComplete.bind(this));
+      this.data.children = HTML5Slider.prototype.getChildren(this.config.obj, this.hideChild.bind(this));
       this.setInterval();
       this.initButtons();
       return this.setSlide(0);
@@ -48,14 +50,11 @@
       }
     },
     hideChild: function(child) {
-      child.style.left = -100 % (child.style.alpha = 0);
+      this.data.anim.hide(child);
       return child.style.display = 'none';
     },
-    showChild: function(child, pos) {
-      if (pos == null) {
-        pos = 0;
-      }
-      child.style.left = pos;
+    showChild: function(child) {
+      this.data.anim.show(child);
       return child.style.display = 'block';
     },
     stepForward: function() {
@@ -80,11 +79,13 @@
       this.resetAnim();
       return this.setInterval();
     },
+    onAnimationComplete: function(setOn, lastSlide) {
+      return this.onChangeOver(setOn, lastSlide);
+    },
     setSlide: function(setOn, anim) {
-      var chLength, currSlide, lastNumber, lastSlide, left;
+      var chLength, currSlide, lastNumber, lastSlide;
       lastNumber = setOn - 1;
       chLength = this.data.children.length;
-      left = 0;
       if (setOn >= chLength) {
         setOn = 0;
       } else if (setOn < 0) {
@@ -100,16 +101,8 @@
         this.onChangeOver(setOn, lastSlide);
         return;
       }
-      this.showChild(currSlide, '100%');
-      return this.data.playingAnim = setInterval((function() {
-        if (lastSlide.style.left === '-100%') {
-          this.onChangeOver(setOn, lastSlide);
-          return;
-        }
-        lastSlide.style.left = -left + '%';
-        currSlide.style.left = 100 - left + '%';
-        return left++;
-      }).bind(this), 1);
+      this.showChild(currSlide);
+      return this.data.playingAnim = this.data.anim.run(lastSlide, currSlide, setOn);
     }
   };
 
