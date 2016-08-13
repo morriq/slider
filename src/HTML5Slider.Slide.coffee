@@ -43,8 +43,8 @@
         elem.addEventListener 'click', action.bind(@, false)
 
     initButtons: ->
-        @initButton @config.next, @nextSlide if @config.prev
-        @initButton @config.prev, @prevSlide if @config.prev
+        @initButton @config.next, @prevSlide if @config.next
+        @initButton @config.prev, @nextSlide if @config.prev
 
     hideChild: (child) ->
         @data.anim.hide child
@@ -84,12 +84,17 @@
         lastNumber  = setOn - 1
         chLength    = @data.children.length
 
+        if setOn > @data.currSlide
+            lastNumber = setOn - 1
+        else
+            lastNumber = setOn + 1
+
         if setOn >= chLength
             setOn = 0
         else if setOn < 0
             setOn       = chLength - 1
             lastNumber  = 0
-        else if setOn is 0
+        else if setOn is 0 and setOn > @data.currSlide
             lastNumber = chLength - 1
 
         lastSlide   = @data.children[lastNumber]
